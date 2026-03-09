@@ -1,16 +1,15 @@
-X: 47
-T: Constant Billy - Oddington
+X: 1
+T: Constant Billy
 C: Trad
-M:6/8
-L:1/8
-W: Dance formula (A2B2)3
+M: 6/8
+L: 1/8
+P: (A2B2)3
 Z: Mackin, Michael Greene, and Grand Union Morris.
-K:G
-r: 32
-R:Rag Morris
+G: Oddington
+K: G
 P: A
 GBd cAB | c2 A AGA | B2 G EFG | ABG FED |
- GBd cAB | c2 A AGA | B2 G E2 E | DEF G3 ||
+GBd cAB | c2 A AGA | B2 G E2 E | DEF G3 ||
 P: B
 Bcd ecA | B2 c dBG | Bcd e2 e |
- ABc dBG | GBd cAB | c2 A AGA | B2 GE2 E | DEF G3 ||
+ABc dBG | GBd cAB | c2 A AGA | B2 GE2 E | DEF G3 ||

@@ -1,17 +1,16 @@
-X:6
-T: South Australia - Adderbury 
-Z: ABC  by Michael Greene (2009) and Mackin (2019)
+X: 1
+T: South Australia
 C: Trad
-R: Rag Morris
-K: D
-L: 1/4
 M: 4/4
-r: 16
-W: Music formula for morris dance: A.(AB)5, A dance off.
+L: 1/4
+P: IA.(AB)5
+Z: ABC  by Michael Greene (2009) and Mackin (2019)
+G: Adderbury
+K: D
 W: Prewarning: Singing
 W: Dance writen by Adelaide Morris
-HA |[P: A] F A A d | B A A2 | B A A2 | B A A3/ G/ |  
+[P: I] HA |[P: A] F A A d | B A A2 | B A A2 | B A A3/ G/ |
 F A A F | E F/E/ D D/E/ | F3/ A/ A F | E2 D2 ||
-P:B
+P: B
 d3/ d/ d A | B A A2 | B A A2 | B A A2 |
 d3/ d/ d A | B A A D/ E/ | F3/ A/ A F |[1-5 E2 D A |[6 E2 D2]|
