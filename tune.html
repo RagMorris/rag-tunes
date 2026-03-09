@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tune</title>
+    <link rel="stylesheet" href="abcjs/abcjs-audio.css">
+    <script src="abcjs/abcjs-basic-min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+
+            gap: 1em;
+
+            font-family: sans-serif;
+        }
+
+        #paper-container {
+            align-self: stretch;
+
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+
+            user-select: none;
+        }
+
+        #tune {
+            flex: 0 1 21cm;
+
+            display: flex;
+            flex-flow: column nowrap;
+
+            gap: 1em;
+        }
+
+        .abcjs-cursor {
+            stroke: none;
+            fill: #00ff00;
+            fill-opacity: 0.25;
+        }
+
+        pre {
+            align-self: center;
+
+            white-space: normal;
+
+            border: 1pt solid black;
+            border-radius: 0.5em;
+            padding: 0.5em;
+        }
+
+        pre:empty,
+        div:empty {
+            display: none;
+        }
+
+        details {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <a href=".">Back to Menu</a>
+    <div id="error"></div>
+    <div id="paper-container">
+        <div id="tune">
+            <div id="paper"></div>
+            <div id="controls"></div>
+
+            <details>
+                <summary>ABC Source</summary>
+                <pre id="abc" style="user-select: text;"></pre>
+            </details>
+        </div>
+    </div>
+
+    <script>
+        class CursorController {
+            constructor() {
+                this.beatSubDivision = 4;
+            }
+
+            onReady() {
+                const svg = document.querySelector('#paper svg');
+                const cursor = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                cursor.setAttribute('class', 'abcjs-cursor');
+                svg?.appendChild(cursor);
+            }
+
+            onStart() { }
+
+            onFinished() { }
+
+            onBeat(beatNumber, totalBeats, totalTime) { }
+
+            onEvent(event) {
+                const svg = document.querySelector('#paper svg');
+
+                if (!svg) {
+                    return;
+                }
+
+                if (event.measureStart === undefined && event.left === undefined) {
+                    return; // this was the second part of a tie across a measure line. Just ignore it.
+                }
+
+                const lastSelection = svg.querySelectorAll('.highlight');
+                for (var k = 0; k < lastSelection.length; k++) lastSelection[k].classList.remove('highlight');
+
+                if (event.elements) {
+                    for (var i = 0; i < event.elements.length; i++) {
+                        var note = event.elements[i];
+                        for (var j = 0; j < note.length; j++) {
+                            note[j].classList.add('highlight');
+                        }
+                    }
+                }
+
+                var cursor = svg.querySelector('.abcjs-cursor');
+                if (cursor) {
+                    cursor.setAttribute('x', event.left);
+                    cursor.setAttribute('y', event.top);
+                    cursor.setAttribute('width', event.width);
+                    cursor.setAttribute('height', event.height);
+                }
+            }
+        }
+
+        const tune = new URLSearchParams(window.location.search).get("tune");
+
+        fetch("tunes/" + tune + ".abc")
+            .then((response) => {
+                if (response.ok) {
+                    return response.text().then((abc) => {
+                        const synthController = new ABCJS.synth.SynthController();
+                        const midiBuffer = new ABCJS.synth.CreateSynth();
+
+                        const tune = ABCJS.renderAbc(
+                            "paper",
+                            abc,
+                            {
+                                responsive: 'resize',
+                                clickListener: function (abcelem, tuneNumber, classes, analysis, drag) {
+                                    if (abcelem.midiPitches !== undefined) {
+                                        abcjs.synth.playEvent(
+                                            abcelem.midiPitches,
+                                            abcelem.midiGraceNotePitches,
+                                            tunesArray[tuneNumber].millisecondsPerMeasure()
+                                        );
+                                    }
+                                }
+                            }
+                        )[0];
+
+                        synthController.load(
+                            "#controls",
+                            new CursorController(),
+                            {
+                                displayLoop: true,
+                                displayRestart: true,
+                                displayPlay: true,
+                                displayProgress: true,
+                                displayWarp: true
+                            }
+                        );
+
+                        midiBuffer.init({ visualObj: tune }).then(() => synthController.setTune(tune, false));
+
+                        document.getElementById("abc").innerText = abc;
+                    });
+                } else {
+                    console.error(response);
+
+                    document.getElementById("error").innerText = `${JSON.stringify(tune)} not found`;
+                }
+            });
+
+    </script>
+</body>
+
+</html>
