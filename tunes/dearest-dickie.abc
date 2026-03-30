@@ -6,7 +6,7 @@ L: 1/8
 Q: 3/8 = 120 "Morris speed"
 P: IA(A2B3)2(A.2 SlowB.3)2
 Z: ABC  by Mackin & Michael Greene
-G: Fieldtown
+G: Field Town
 K: G
 [P: I] D [P: A]|: "G" G2 G BAB |  "C" cBc "D" def | "G" gfg "C" edc | "G" BAG "D" FED |
 "G" G2 G BAB | "C" cBc "D" def | "G" gfg "A" AB^c | [1 "D" d3/e/d cBA :| [2 "D" d3-dBc ||
